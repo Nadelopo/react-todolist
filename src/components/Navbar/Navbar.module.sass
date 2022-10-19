@@ -1,0 +1,21 @@
+.theme, .settings
+  margin-left: auto
+  cursor: pointer
+  height: 22px
+  width: 20px
+  transition: .3s
+  fill: var(--color)
+  &:hover
+    transform: rotate(180deg) scale(1.1)
+
+.header
+  display: flex
+  gap: 10px
+
+.settings-enter-active,
+.settings-leave-active
+  transition: opacity 0.4s ease
+
+.settings-enter-from,
+.settings-leave-to
+  opacity: 0
