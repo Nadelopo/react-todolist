@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import checker from 'vite-plugin-checker'
-import svgLoader from 'vite-svg-loader'
 import react from '@vitejs/plugin-react'
+import svgr from 'vite-plugin-svgr'
 import path from 'path'
 
 // https://vitejs.dev/config/
@@ -13,7 +13,7 @@ export default defineConfig({
         lintCommand: 'eslint "./src/**/*.{js,ts,tsx}"',
       },
     }),
-    svgLoader(),
+    svgr(),
   ],
   resolve: {
     alias: {
