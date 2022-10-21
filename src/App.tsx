@@ -5,6 +5,8 @@ import Auth from '@/pages/Auth'
 import { Home } from './pages/Home'
 import { Profile } from './pages/Profile'
 import { Navbar } from './components/Navbar'
+import { store } from './redux/store'
+import { Provider } from 'react-redux'
 
 export const routesName = {
   Auth: '/auth',
@@ -24,10 +26,12 @@ const App = () => {
 const AppWrapper = () => {
   return (
     <Router>
-      <div className="container">
-        <Navbar />
-        <App />
-      </div>
+      <Provider store={store}>
+        <div className="container">
+          <Navbar />
+          <App />
+        </div>
+      </Provider>
     </Router>
   )
 }
