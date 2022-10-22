@@ -59,7 +59,10 @@ const AppWrapper = () => {
       dispatch(getAllTasks(session.user.id))
     } else {
       dispatch(setUserData(''))
+      dispatch(getTasks({ userId: '', currentCategoryId }))
+      dispatch(getAllTasks(''))
       dispatch(setUserId())
+      dispatch(getCategories(''))
     }
   })
 

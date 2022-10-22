@@ -19,7 +19,7 @@ export const setUserData = createAsyncThunk(
 export const setUserId = createAsyncThunk('user,setUserId', async () => {
   const token = JSON.parse(localStorage.getItem('supabase.auth.token') || '{}')
     ?.currentSession?.access_token
-  if (!Object.keys(token).length) return ''
+  if (!token) return null
   const data = (await supabase.auth.api.getUser(token)).user?.id || ''
   return data
 })
@@ -35,10 +35,12 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(setUserData.fulfilled, (state, action) => {
-      state.user = action.payload
+      if (action.payload) state.user = action.payload
+      else state.user = null
     })
     builder.addCase(setUserId.fulfilled, (state, action) => {
-      state.userId = action.payload
+      if (action.payload) state.userId = action.payload
+      else state.userId = ''
     })
   },
 })

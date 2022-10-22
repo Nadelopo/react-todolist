@@ -5,6 +5,7 @@ import { IaddTaskparams, IgetTasksParams, IinitialState, Itask } from './types'
 export const getAllTasks = createAsyncThunk(
   'Alltasks/getAllTasks',
   async (userId: string) => {
+    if (!userId) return null
     const { data, error } = await supabase
       .from<Itask>('Tasks')
       .select()
@@ -18,6 +19,7 @@ export const getTasks = createAsyncThunk(
   'tasks/getTasks',
   async (params: IgetTasksParams) => {
     const { userId, currentCategoryId } = params
+    if (!userId) return null
     let Data, Error
     if (currentCategoryId) {
       const { data, error } = await supabase
@@ -72,9 +74,11 @@ export const categorieSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getAllTasks.fulfilled, (state, action) => {
       if (action.payload) state.allTasks = action.payload
+      else state.allTasks = []
     })
     builder.addCase(getTasks.fulfilled, (state, action) => {
       if (action.payload) state.tasks = action.payload.reverse()
+      else state.tasks = []
     })
     builder.addCase(addTask.fulfilled, (state, action) => {
       const searchParams = Object.fromEntries(
