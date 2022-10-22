@@ -1,5 +1,6 @@
 import { routesName } from '@/App'
 import { setCurrentCategory } from '@/redux/slices/CategorieSlice'
+import { getTasks } from '@/redux/slices/TaskSlice'
 import { RootState, useAppDispatch } from '@/redux/store'
 
 import React from 'react'
@@ -12,18 +13,24 @@ export const Categories = () => {
   const { categories, currentCategoryId } = useSelector(
     (state: RootState) => state.categories
   )
+  const { userId } = useSelector((state: RootState) => state.user)
+
+  React.useEffect(() => {
+    dispatch(getTasks({ userId, currentCategoryId }))
+  }, [currentCategoryId])
 
   return (
     <div>
       <div className="flex justify-center">
         <div className={'my-3 ' + S.scrollcategory}>
           <div className="flex items-center">
-            <div
+            <Link
+              to="/"
               className="cbtn"
               onClick={() => dispatch(setCurrentCategory(null))}
             >
               все
-            </div>
+            </Link>
           </div>
           {categories.map((category) => (
             <div key={category.id} className="mx-2 flex items-center">

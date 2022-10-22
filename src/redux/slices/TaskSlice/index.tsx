@@ -1,8 +1,6 @@
-import { RootState } from '@/redux/store'
 import { supabase } from '@/supabase'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { useSelector } from 'react-redux'
-import { IinitialState, Itask } from './types'
+import { IaddTaskparams, IgetTasksParams, IinitialState, Itask } from './types'
 
 export const getAllTasks = createAsyncThunk(
   'Alltasks/getAllTasks',
@@ -12,16 +10,14 @@ export const getAllTasks = createAsyncThunk(
       .select()
       .eq('userId', userId)
     if (error) console.log(error)
-    return { data }
+    return data
   }
 )
 
 export const getTasks = createAsyncThunk(
   'tasks/getTasks',
-  async (userId: string) => {
-    const { currentCategoryId } = useSelector(
-      (state: RootState) => state.categories
-    )
+  async (params: IgetTasksParams) => {
+    const { userId, currentCategoryId } = params
     let Data, Error
     if (currentCategoryId) {
       const { data, error } = await supabase
@@ -43,7 +39,24 @@ export const getTasks = createAsyncThunk(
     }
     if (Error) console.log(Error)
     //  if (Data) this.tasks = Data.reverse()
-    return { Data }
+    return Data
+  }
+)
+
+export const addTask = createAsyncThunk(
+  'tasks/addTask',
+  async (params: IaddTaskparams) => {
+    const { title, categoryId, userId } = params
+    const { data, error } = await supabase
+      .from<Itask>('Tasks')
+      .insert({
+        title,
+        categoryId,
+        userId,
+      })
+      .single()
+    if (error) console.log(error)
+    return { data, categoryId }
   }
 )
 
@@ -58,13 +71,24 @@ export const categorieSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAllTasks.fulfilled, (state, action) => {
-      if (action.payload.data) {
-        state.allTasks = action.payload.data
-      }
+      if (action.payload) state.allTasks = action.payload
     })
     builder.addCase(getTasks.fulfilled, (state, action) => {
-      if (action.payload.Data) {
-        state.tasks = action.payload.Data.reverse()
+      if (action.payload) state.tasks = action.payload.reverse()
+    })
+    builder.addCase(addTask.fulfilled, (state, action) => {
+      const searchParams = Object.fromEntries(
+        new URL(String(window.location)).searchParams.entries()
+      )
+      const { data, categoryId } = action.payload
+      if (data) {
+        state.allTasks.push(data)
+        if (
+          searchParams.category == String(categoryId) ||
+          !searchParams.category
+        ) {
+          state.tasks.unshift(data)
+        }
       }
     })
   },

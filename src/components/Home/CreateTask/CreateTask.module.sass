@@ -1,0 +1,49 @@
+.select
+  position: absolute
+  z-index: 100
+  position: absolute
+  width: 100%
+  background: var(--back-main)
+  border-radius: 8px
+  display: flex
+  padding: 4px 10px
+  transition: .3s
+  cursor: pointer
+  align-items: center
+  justify-content: space-between
+  &__tick
+    width: 10px
+    height: 8px
+    fill: var(--color)
+  &__active
+    border-radius: 8px 10px 0 0
+
+.list
+  position: absolute
+  z-index: 100
+  width: 100%
+  cursor: pointer
+  background: var(--back-main)
+  padding: 4px
+  border-radius: 0 0 8px 8px
+  visibility: hidden
+  opacity: 0
+  transition: .2s
+  .li
+    cursor: pointer
+    padding: 2px 6px
+    border-radius: 8px
+    &:hover
+      background: var(--back-second)
+  &__active
+    visibility: visible
+    transition: .3s
+    opacity: 1
+
+.form__warning
+  box-shadow: 0 0 8px 2px #ffffff70!important
+  transition: .3s
+
+.remove__invalid
+  &:invalid
+    box-shadow: none

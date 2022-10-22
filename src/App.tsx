@@ -7,9 +7,10 @@ import { Profile } from './pages/Profile'
 import { Navbar } from './components/Navbar'
 import { setUserData, setUserId } from './redux/slices/UserSlice'
 import { supabase } from './supabase'
-import { useAppDispatch } from './redux/store'
-import { getTasks } from './redux/slices/TaskSlice'
+import { RootState, useAppDispatch } from './redux/store'
+import { getAllTasks, getTasks } from './redux/slices/TaskSlice'
 import { getCategories } from './redux/slices/CategorieSlice'
+import { useSelector } from 'react-redux'
 
 export const routesName = {
   Auth: '/auth',
@@ -29,6 +30,10 @@ const App = () => {
 const AppWrapper = () => {
   const dispatch = useAppDispatch()
 
+  const { currentCategoryId } = useSelector(
+    (state: RootState) => state.categories
+  )
+
   useEffect(() => {
     const token = JSON.parse(
       localStorage.getItem('supabase.auth.token') || '{}'
@@ -38,7 +43,8 @@ const AppWrapper = () => {
         const id = User.user?.id || ''
         dispatch(setUserData(id))
         dispatch(getCategories(id))
-        dispatch(getTasks(id))
+        dispatch(getTasks({ userId: id, currentCategoryId }))
+        dispatch(getAllTasks(id))
       })
       dispatch(setUserId())
     }
@@ -49,7 +55,8 @@ const AppWrapper = () => {
       dispatch(setUserData(session.user?.id || ''))
       dispatch(setUserId())
       dispatch(getCategories(session.user.id))
-      dispatch(getTasks(session.user.id))
+      dispatch(getTasks({ userId: session.user.id, currentCategoryId }))
+      dispatch(getAllTasks(session.user.id))
     } else {
       dispatch(setUserData(''))
       dispatch(setUserId())

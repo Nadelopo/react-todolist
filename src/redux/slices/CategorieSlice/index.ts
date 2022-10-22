@@ -2,7 +2,7 @@ import { supabase } from '@/supabase'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ICategoriesState, ICategory } from './types'
 
-const params = Object.fromEntries(
+const searchParams = Object.fromEntries(
   new URL(String(window.location)).searchParams.entries()
 )
 
@@ -14,13 +14,13 @@ export const getCategories = createAsyncThunk(
       .select()
       .eq('userId', userId)
     if (error) console.log(error)
-    return { data }
+    return data
   }
 )
 
 const initialState: ICategoriesState = {
   categories: [],
-  currentCategoryId: Number(params.category) || null,
+  currentCategoryId: Number(searchParams.category) || null,
 }
 
 export const categorieSlice = createSlice({
@@ -33,10 +33,7 @@ export const categorieSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getCategories.fulfilled, (state, action) => {
-      if (action.payload.data) {
-        state.categories = action.payload.data
-        console.log(state.categories)
-      }
+      if (action.payload) state.categories = action.payload
     })
   },
 })

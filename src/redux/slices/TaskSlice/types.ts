@@ -11,3 +11,14 @@ export interface IinitialState {
   tasks: Itask[]
   allTasks: Itask[]
 }
+
+export interface IaddTaskparams {
+  title: string
+  categoryId: number
+  userId: string
+}
+
+export interface IgetTasksParams {
+  userId: string
+  currentCategoryId: number | null
+}
