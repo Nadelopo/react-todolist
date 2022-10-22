@@ -1,5 +1,5 @@
 import { supabase } from '@/supabase'
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ICategoriesState, ICategory } from './types'
 
 export const getCategories = createAsyncThunk(
@@ -15,12 +15,17 @@ export const getCategories = createAsyncThunk(
 
 const initialState: ICategoriesState = {
   categories: [],
+  currentCategoryId: null,
 }
 
 export const categorieSlice = createSlice({
   name: 'categories',
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentCategory(state, action: PayloadAction<number | null>) {
+      state.currentCategoryId = action.payload
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getCategories.fulfilled, (state, action) => {
       if (action.payload.data) {
@@ -32,6 +37,6 @@ export const categorieSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-// export const { increment, decrement, incrementByAmount } = categorieSlice.actions
+export const { setCurrentCategory } = categorieSlice.actions
 
 export default categorieSlice.reducer

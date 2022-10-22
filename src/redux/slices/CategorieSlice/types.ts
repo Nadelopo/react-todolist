@@ -1,5 +1,6 @@
 export interface ICategoriesState {
   categories: ICategory[]
+  currentCategoryId: number | null
 }
 
 export interface ICategory {
