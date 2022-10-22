@@ -1,13 +1,8 @@
-import { getTasks } from '@/redux/slices/TaskSlice'
-import { RootState, useAppDispatch } from '@/redux/store'
-import R from 'react'
+import { RootState } from '@/redux/store'
+import React from 'react'
 import { useSelector } from 'react-redux'
 
 export const TaskBlock = () => {
-  const dispatch = useAppDispatch()
-  R.useEffect(() => {
-    // dispatch(getTasks())
-  }, [])
   const { tasks } = useSelector((state: RootState) => state.tasks)
   return (
     <div>

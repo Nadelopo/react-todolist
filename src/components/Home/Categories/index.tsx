@@ -1,21 +1,17 @@
 import { routesName } from '@/App'
-import {
-  getCategories,
-  setCurrentCategory,
-} from '@/redux/slices/CategorieSlice'
+import { setCurrentCategory } from '@/redux/slices/CategorieSlice'
 import { RootState, useAppDispatch } from '@/redux/store'
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import S from './Categories.module.sass'
 
 export const Categories = () => {
   const dispatch = useAppDispatch()
-  const { categories } = useSelector((state: RootState) => state.categories)
-  useEffect(() => {
-    dispatch(getCategories())
-  }, [])
+  const { categories, currentCategoryId } = useSelector(
+    (state: RootState) => state.categories
+  )
 
   return (
     <div>
@@ -33,7 +29,9 @@ export const Categories = () => {
             <div key={category.id} className="mx-2 flex items-center">
               <Link
                 to={`${routesName.Home}?category=${category.id}`}
-                className="cbtn"
+                className={
+                  'cbtn ' + (category.id === currentCategoryId && 'active')
+                }
                 onClick={() => dispatch(setCurrentCategory(category.id))}
               >
                 {category.title}

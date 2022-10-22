@@ -2,12 +2,17 @@ import { supabase } from '@/supabase'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ICategoriesState, ICategory } from './types'
 
+const params = Object.fromEntries(
+  new URL(String(window.location)).searchParams.entries()
+)
+
 export const getCategories = createAsyncThunk(
   'categories/getCategories',
-  async () => {
+  async (userId: string) => {
     const { data, error } = await supabase
       .from<ICategory>('Categories')
       .select()
+      .eq('userId', userId)
     if (error) console.log(error)
     return { data }
   }
@@ -15,7 +20,7 @@ export const getCategories = createAsyncThunk(
 
 const initialState: ICategoriesState = {
   categories: [],
-  currentCategoryId: null,
+  currentCategoryId: Number(params.category) || null,
 }
 
 export const categorieSlice = createSlice({
