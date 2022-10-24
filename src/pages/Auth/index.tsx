@@ -3,7 +3,7 @@ import { supabase } from '@/supabase'
 import Swal from 'sweetalert2'
 import S from './Auth.module.sass'
 import { useNavigate } from 'react-router-dom'
-import { routesName } from '@/App'
+import { routesName } from '@/index'
 
 interface Iuser {
   id: string

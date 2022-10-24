@@ -1,4 +1,4 @@
-import { routesName } from '@/App'
+import { routesName } from '@/index'
 import { supabase } from '@/supabase'
 import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'

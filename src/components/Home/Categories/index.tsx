@@ -1,4 +1,4 @@
-import { routesName } from '@/App'
+import { routesName } from '@/index'
 import { setCurrentCategory } from '@/redux/slices/CategorieSlice'
 import { getTasks } from '@/redux/slices/TaskSlice'
 import { RootState, useAppDispatch } from '@/redux/store'
