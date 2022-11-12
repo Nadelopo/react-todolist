@@ -1,5 +1,6 @@
 import { supabase } from '@/supabase'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { ICurrentCategory } from '../CategorieSlice/types'
 import { IaddTaskparams, IgetTasksParams, IinitialState, Itask } from './types'
 
 export const getAllTasks = createAsyncThunk(
@@ -62,6 +63,50 @@ export const addTask = createAsyncThunk(
   }
 )
 
+export const editTaskStatus = createAsyncThunk(
+  'tasks/editTaskStatus',
+  async (task: Itask) => {
+    const { data, error } = await supabase
+      .from<Itask>('Tasks')
+      .update({ status: !task.status })
+      .eq('id', task.id)
+      .single()
+
+    if (error) console.log(error)
+    return { data, taskId: task.id }
+  }
+)
+
+export const deleteTask = createAsyncThunk(
+  'tasks/deleteTask',
+  async (id: number) => {
+    const { data, error } = await supabase
+      .from<Itask>('Tasks')
+      .delete()
+      .eq('id', id)
+      .single()
+    if (error) console.log(error)
+    return { data, taskId: id }
+  }
+)
+
+export const updateTask = createAsyncThunk(
+  'tasks/updateTask',
+  async (task: ICurrentCategory) => {
+    let data
+    if (task.id) {
+      const { data: dataReq, error } = await supabase
+        .from<Itask>('Tasks')
+        .update({ title: task.title })
+        .eq('id', task.id)
+        .single()
+      if (error) console.log(error)
+      data = dataReq
+    }
+    return { data, taskId: task.id }
+  }
+)
+
 const initialState: IinitialState = {
   tasks: [],
   allTasks: [],
@@ -93,6 +138,28 @@ export const categorieSlice = createSlice({
         ) {
           state.tasks.unshift(data)
         }
+      }
+    })
+    builder.addCase(editTaskStatus.fulfilled, (state, action) => {
+      const { data, taskId } = action.payload
+      if (data) {
+        state.tasks = state.tasks.map((t) =>
+          t.id == taskId ? { ...t, status: data.status } : t
+        )
+      }
+    })
+    builder.addCase(deleteTask.fulfilled, (state, action) => {
+      const { data, taskId } = action.payload
+      if (data) {
+        state.tasks = state.tasks.filter((t) => t.id !== taskId)
+      }
+    })
+    builder.addCase(updateTask.fulfilled, (state, action) => {
+      const { data, taskId } = action.payload
+      if (data) {
+        state.tasks = state.tasks.map((t) =>
+          t.id === taskId ? { ...t, title: data.title } : t
+        )
       }
     })
   },
