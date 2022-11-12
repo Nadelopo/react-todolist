@@ -1,11 +1,11 @@
-import { routesName } from '@/index'
-import { supabase } from '@/supabase'
 import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { routesName } from '@/index'
+import { supabase } from '@/supabase'
 import S from './Navbar.module.sass'
 import { ReactComponent as SettingSVG } from '@/assets/icons/settings.svg'
 
-export const Navbar = () => {
+export const Navbar: React.FC = () => {
   const navigate = useNavigate()
 
   const signOut = async () => {

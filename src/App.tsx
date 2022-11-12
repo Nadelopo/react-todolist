@@ -1,23 +1,22 @@
-import R from 'react'
-
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Navbar } from './components/Navbar'
 import { setUserData, setUserId } from './redux/slices/UserSlice'
 import { supabase } from './supabase'
 import { RootState, useAppDispatch } from './redux/store'
 import { getAllTasks, getTasks } from './redux/slices/TaskSlice'
 import { getCategories } from './redux/slices/CategorieSlice'
-import { useSelector } from 'react-redux'
 
-const AppWrapper = () => {
+const AppWrapper: React.FC = () => {
   const dispatch = useAppDispatch()
 
   const { currentCategoryId } = useSelector(
     (state: RootState) => state.categories
   )
 
-  const [isMounted, setIsMounted] = R.useState(false)
-  const [eventValue, setEventValue] = R.useState('')
-  R.useEffect(() => {
+  const [isMounted, setIsMounted] = useState(false)
+  const [eventValue, setEventValue] = useState('')
+  useEffect(() => {
     if (isMounted) {
       const token = JSON.parse(
         localStorage.getItem('supabase.auth.token') || '{}'
@@ -36,7 +35,7 @@ const AppWrapper = () => {
     setIsMounted(true)
   }, [isMounted])
 
-  R.useEffect(() => {
+  useEffect(() => {
     supabase.auth.onAuthStateChange(async (event, session) => {
       setEventValue(event)
       if (event !== eventValue) {

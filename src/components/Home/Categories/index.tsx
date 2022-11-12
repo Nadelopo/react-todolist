@@ -1,21 +1,20 @@
+import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { routesName } from '@/index'
 import { setCurrentCategory } from '@/redux/slices/CategorieSlice'
 import { getTasks } from '@/redux/slices/TaskSlice'
 import { RootState, useAppDispatch } from '@/redux/store'
-
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import S from './Categories.module.sass'
 
-export const Categories = () => {
+export const Categories: React.FC = () => {
   const dispatch = useAppDispatch()
   const { categories, currentCategoryId } = useSelector(
     (state: RootState) => state.categories
   )
   const { userId } = useSelector((state: RootState) => state.user)
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(getTasks({ userId, currentCategoryId }))
   }, [currentCategoryId])
 

@@ -1,27 +1,27 @@
-import R from 'react'
-import { ReactComponent as TickSVG } from '@/assets/icons/tick.svg'
-import { TaskBlock } from '../TaskBlock'
-import S from './CreateTask.module.sass'
+import React, { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
+import Swal from 'sweetalert2'
+import { TaskBlock } from '../TaskBlock'
 import { RootState, useAppDispatch } from '@/redux/store'
 import { ICategory } from '@/redux/slices/CategorieSlice/types'
-import Swal from 'sweetalert2'
 import { addTask } from '@/redux/slices/TaskSlice'
+import S from './CreateTask.module.sass'
+import { ReactComponent as TickSVG } from '@/assets/icons/tick.svg'
 
 interface IcurrentCategory {
   id?: number
   title?: string
 }
 
-export const CreateTask = () => {
+export const CreateTask: React.FC = () => {
   const dispatch = useAppDispatch()
-  const [newTask, setNewTask] = R.useState('')
-  const [open, setOpen] = R.useState(false)
-  const [activeSelect, setActiveSelect] = R.useState(false)
-  const [formWarning, setFormWarning] = R.useState(false)
-  const [currentCategory, setCurrentCategory] = R.useState<IcurrentCategory>({})
+  const [newTask, setNewTask] = useState('')
+  const [open, setOpen] = useState(false)
+  const [activeSelect, setActiveSelect] = useState(false)
+  const [formWarning, setFormWarning] = useState(false)
+  const [currentCategory, setCurrentCategory] = useState<IcurrentCategory>({})
   const { categories } = useSelector((state: RootState) => state.categories)
-  const wrapRef = R.useRef(null)
+  const wrapRef = useRef(null)
 
   const clickOnCategory = (category: ICategory) => {
     setCurrentCategory({ id: category.id, title: category.title })

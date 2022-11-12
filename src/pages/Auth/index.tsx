@@ -1,9 +1,9 @@
-import R, { FormEvent } from 'react'
-import { supabase } from '@/supabase'
-import Swal from 'sweetalert2'
-import S from './Auth.module.sass'
+import React, { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import { supabase } from '@/supabase'
 import { routesName } from '@/index'
+import S from './Auth.module.sass'
 
 interface Iuser {
   id: string
@@ -18,12 +18,12 @@ interface ICategory {
   userId: string
 }
 
-const Auth = () => {
+const Auth: React.FC = () => {
   const navigate = useNavigate()
 
-  const [email, setEmail] = R.useState('')
-  const [password, setPassword] = R.useState('')
-  const [change, setChange] = R.useState(true)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [change, setChange] = useState(true)
 
   const signUp = async () => {
     const { user, error } = await supabase.auth.signUp({

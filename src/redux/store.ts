@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { useDispatch } from 'react-redux'
 import categories from './slices/CategorieSlice'
 import tasks from './slices/TaskSlice'
-import { useDispatch } from 'react-redux'
 import user from './slices/UserSlice'
 
 export const store = configureStore({

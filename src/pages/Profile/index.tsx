@@ -1,6 +1,7 @@
+import React from 'react'
 import { OverviewsTasks } from '@/components/Profile/OverviewsTasks'
 
-export const Profile = () => {
+export const Profile: React.FC = () => {
   return (
     <div>
       <OverviewsTasks />

@@ -1,9 +1,9 @@
-import { RootState } from '@/redux/store'
 import React, { useMemo } from 'react'
+import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
 import S from './OverviewsTasks.module.sass'
 
-export const OverviewsTasks = () => {
+export const OverviewsTasks: React.FC = () => {
   const { allTasks } = useSelector((state: RootState) => state.tasks)
   const completedTasks = useMemo(
     () => allTasks.filter((e) => e.status === true).length,

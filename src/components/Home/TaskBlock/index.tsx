@@ -1,7 +1,6 @@
-import { RootState, useAppDispatch } from '@/redux/store'
 import React, { ChangeEvent, useEffect, useState } from 'react'
+import { RootState, useAppDispatch } from '@/redux/store'
 import { useSelector } from 'react-redux'
-import S from './TaskBlock.module.sass'
 import {
   deleteTask,
   editTaskStatus,
@@ -9,13 +8,14 @@ import {
   updateTask,
 } from '@/redux/slices/TaskSlice'
 import { Popup } from '@/components/UI/Popup'
+import S from './TaskBlock.module.sass'
 
 type TcurrentTask = {
   id?: number
   title?: string
 }
 
-export const TaskBlock = () => {
+export const TaskBlock: React.FC = () => {
   const dispatch = useAppDispatch()
   const { tasks } = useSelector((state: RootState) => state.tasks)
   const { userId } = useSelector((state: RootState) => state.user)

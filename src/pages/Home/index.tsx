@@ -1,8 +1,8 @@
+import React from 'react'
 import { Categories } from '@/components/Home/Categories'
 import { CreateTask } from '@/components/Home/CreateTask'
-import React from 'react'
 
-export const Home = () => {
+export const Home: React.FC = () => {
   return (
     <div>
       <Categories />
