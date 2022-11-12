@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { RootState, useAppDispatch } from '@/redux/store'
 import { useSelector } from 'react-redux'
 import {
@@ -34,10 +34,6 @@ export const TaskBlock: React.FC = () => {
       id,
       title,
     })
-  }
-
-  const setCurrentTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setCurrentChangedTask({ ...currentChangedTask, title: e.target.value })
   }
 
   const saveChanges = async () => {
@@ -87,7 +83,9 @@ export const TaskBlock: React.FC = () => {
         {isInputOpen && (
           <div className="mt-6">
             <input
-              onChange={setCurrentTaskTitle}
+              onChange={(e) =>
+                setCurrentChangedTask((t) => ({ ...t, title: e.target.value }))
+              }
               value={currentChangedTask.title}
               type="text"
             />

@@ -14,3 +14,13 @@ export interface ICurrentCategory {
   id?: number
   title?: string
 }
+
+export interface IupdateCategory {
+  title: string
+  currentCategoryId: number
+}
+
+export interface IcreateCategory {
+  userId: string
+  title: string
+}
