@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { isOutside } from '@/utils/isOutside'
 import S from './Popup.module.sass'
 
 interface IPopup {
@@ -18,21 +19,19 @@ export const Popup: React.FC<IPopup> = ({
   const [changePosition, setChangePosition] = useState(false)
   const popupRef = useRef<HTMLDivElement>(null)
 
-  const clickOutside = (e: MouseEvent) => {
-    if (popupRef.current && !e.composedPath().includes(popupRef.current)) {
-      setIsOpen(false)
-    }
+  const hidePopup = (e: MouseEvent) => {
+    if (isOutside(popupRef, e)) setIsOpen(false)
   }
 
   useEffect(() => {
-    if (isOpen) addEventListener('click', clickOutside)
-    else removeEventListener('click', clickOutside)
+    if (isOpen) addEventListener('click', hidePopup)
+    else removeEventListener('click', hidePopup)
 
     if (isOpen) setChangePosition(true)
     setTimeout(() => {
       if (!isOpen) setChangePosition(false)
     }, 200)
-    return () => removeEventListener('click', clickOutside)
+    return () => removeEventListener('click', hidePopup)
   }, [isOpen])
 
   return (

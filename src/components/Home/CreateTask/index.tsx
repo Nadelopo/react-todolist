@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
 import { TaskBlock } from '../TaskBlock'
@@ -7,6 +7,7 @@ import { ICategory } from '@/redux/slices/CategorieSlice/types'
 import { addTask } from '@/redux/slices/TaskSlice'
 import S from './CreateTask.module.sass'
 import { ReactComponent as TickSVG } from '@/assets/icons/tick.svg'
+import { isOutside } from '@/utils/isOutside'
 
 interface IcurrentCategory {
   id?: number
@@ -21,7 +22,7 @@ export const CreateTask: React.FC = () => {
   const [formWarning, setFormWarning] = useState(false)
   const [currentCategory, setCurrentCategory] = useState<IcurrentCategory>({})
   const { categories } = useSelector((state: RootState) => state.categories)
-  const wrapRef = useRef(null)
+  const selectRef = useRef(null)
 
   const clickOnCategory = (category: ICategory) => {
     setCurrentCategory({ id: category.id, title: category.title })
@@ -45,6 +46,16 @@ export const CreateTask: React.FC = () => {
       setNewTask('')
     }
   }
+
+  const hideSelect = (e: MouseEvent) => {
+    if (isOutside(selectRef, e)) setActiveSelect(false)
+  }
+
+  useEffect(() => {
+    if (activeSelect) addEventListener('click', hideSelect)
+    else removeEventListener('click', hideSelect)
+    return () => removeEventListener('click', hideSelect)
+  }, [activeSelect])
 
   return (
     <div>
@@ -71,7 +82,7 @@ export const CreateTask: React.FC = () => {
             </div>
             <div className="mb-4 relative z-0">
               <div
-                ref={wrapRef}
+                ref={selectRef}
                 className={`${S.select} ${activeSelect && S.select__active} ${
                   formWarning && S.form__warning
                 }`}
