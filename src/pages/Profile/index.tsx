@@ -1,5 +1,9 @@
-import React from 'react'
+import { OverviewsTasks } from '@/components/Profile/OverviewsTasks'
 
 export const Profile = () => {
-  return <div>Profile</div>
+  return (
+    <div>
+      <OverviewsTasks />
+    </div>
+  )
 }
