@@ -49,7 +49,13 @@ export const Settings: React.FC<Isettings> = ({ setOpenSettings }) => {
             >
               сменить тему
             </div>
-            <Accordion visible={visible} list={list} />
+            <Accordion visible={visible}>
+              {list.map((el, i) => (
+                <button key={i} className={S.li} onClick={el.func}>
+                  {el.title}
+                </button>
+              ))}
+            </Accordion>
           </div>
         </div>
       </div>

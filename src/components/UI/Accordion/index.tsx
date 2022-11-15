@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react'
+import React, { Children, cloneElement, ReactElement, useMemo } from 'react'
 import S from './Accordion.module.sass'
 
 interface Iaccordion {
   visible: boolean
+  children: ReactElement[]
   heightContent?: number
   paddingTop?: number
   paddingBottom?: number
-  list: { title: string; func: () => void }[]
 }
 
 export const Accordion: React.FC<Iaccordion> = (props) => {
@@ -33,16 +33,9 @@ export const Accordion: React.FC<Iaccordion> = (props) => {
 
   return (
     <div className={`${S.accordion} ${props.visible && S.active}`}>
-      {props.list.map((el, i) => (
-        <button
-          className={S.li}
-          style={{ ...calcHeigth }}
-          key={i}
-          onClick={el.func}
-        >
-          {el.title}
-        </button>
-      ))}
+      {Children.map(props.children, (child) =>
+        cloneElement(child, { style: { ...calcHeigth } })
+      )}
     </div>
   )
 }
