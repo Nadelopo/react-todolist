@@ -25,7 +25,7 @@ export const Categories: React.FC = () => {
           <div className="flex items-center">
             <Link
               to="/"
-              className="cbtn"
+              className={'cbtn ' + (!currentCategoryId && 'active')}
               onClick={() => dispatch(setCurrentCategory(null))}
             >
               все
