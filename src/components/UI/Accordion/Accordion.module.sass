@@ -1,0 +1,25 @@
+.accordion
+  visibility: hidden
+  opacity: 0
+  transition: .3s
+  div, button, a
+    display: block
+    padding-top: 0
+    padding-bottom: 0
+    transition: .3s
+    height: 0px
+    text-align: start
+  &.active
+    visibility: visible
+    opacity: 1
+
+.li
+  border-radius: 8px
+  cursor: pointer
+  padding: 0 10px
+  transition: .3s
+  display: block
+  width: 100%
+  text-align: start
+  &:hover
+    background: var(--back-main)

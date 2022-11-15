@@ -7,6 +7,7 @@ import React, {
 } from 'react'
 import S from './Settings.module.sass'
 import { ReactComponent as CloseSVG } from '@/assets/icons/close.svg'
+import { Accordion } from '../UI/Accordion'
 
 interface Isettings {
   setOpenSettings: Dispatch<SetStateAction<boolean>>
@@ -22,6 +23,13 @@ export const Settings: React.FC<Isettings> = ({ setOpenSettings }) => {
     localStorage.setItem('theme', theme)
   }, [theme])
 
+  const list = [
+    { title: 'темная', func: () => setTheme('dark') },
+    { title: 'светлая', func: () => setTheme('light') },
+    { title: 'бирюзовый', func: () => setTheme('turquoise') },
+    { title: 'фиолетовый', func: () => setTheme('purple') },
+    { title: 'ораньжевый', func: () => setTheme('orange') },
+  ]
   return (
     <div className={S.root}>
       <div className="container">
@@ -41,25 +49,7 @@ export const Settings: React.FC<Isettings> = ({ setOpenSettings }) => {
             >
               сменить тему
             </div>
-            {/* <Accordion :visible="visible"> */}
-            <div>
-              <div className={S.li} onClick={() => setTheme('dark')}>
-                темная
-              </div>
-              <div className={S.li} onClick={() => setTheme('light')}>
-                светлая
-              </div>
-              <div className={S.li} onClick={() => setTheme('turquoise')}>
-                бирюзовый
-              </div>
-              <div className={S.li} onClick={() => setTheme('purple')}>
-                фиолетовый
-              </div>
-              <div className={S.li} onClick={() => setTheme('orange')}>
-                ораньжевый
-              </div>
-            </div>
-            {/* </Accordion> */}
+            <Accordion visible={visible} list={list} />
           </div>
         </div>
       </div>
