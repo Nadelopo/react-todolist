@@ -11,7 +11,7 @@ import S from './Accordion.module.sass'
 
 interface Iaccordion {
   visible: boolean
-  children: ReactElement[]
+  children: (ReactElement | ReactElement[])[]
   paddingTop?: number
   paddingBottom?: number
 }
@@ -23,11 +23,19 @@ interface Istyles {
 }
 
 export const Accordion: React.FC<Iaccordion> = (props) => {
-  const refsArray: RefObject<HTMLElement>[] = props.children.map(() =>
-    createRef()
-  )
   const [heightFull, setHeightFull] = React.useState<number[]>([])
   const [styles, setStyles] = useState<(Istyles | null)[]>([])
+  const [childrens, setChildrens] = useState<ReactElement[]>([])
+
+  const refsArray: RefObject<HTMLElement>[] = childrens.map(() => createRef())
+
+  useEffect(() => {
+    setChildrens([])
+    props.children.forEach((child) => {
+      if (child instanceof Array) setChildrens((v) => [...v, ...child])
+      else setChildrens((v) => [...v, child])
+    })
+  }, [])
 
   useEffect(() => {
     setHeightFull([])
@@ -39,7 +47,7 @@ export const Accordion: React.FC<Iaccordion> = (props) => {
         })
       }
     })
-  }, [])
+  }, [childrens])
 
   const calcHeigth = (heightF: number) => {
     let paddingTop = '0px'
@@ -66,7 +74,7 @@ export const Accordion: React.FC<Iaccordion> = (props) => {
 
   return (
     <div className={`${S.accordion} ${props.visible && S.active}`}>
-      {Children.map(props.children, (child, i) =>
+      {Children.map(childrens, (child, i) =>
         cloneElement(child, {
           style: { ...styles[i] },
           ref: refsArray[i],
