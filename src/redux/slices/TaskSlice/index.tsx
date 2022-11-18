@@ -6,7 +6,6 @@ import { IaddTaskparams, IgetTasksParams, IinitialState, Itask } from './types'
 export const getAllTasks = createAsyncThunk(
   'Alltasks/getAllTasks',
   async (userId: string) => {
-    if (!userId) return null
     const { data, error } = await supabase
       .from<Itask>('Tasks')
       .select()
@@ -20,7 +19,6 @@ export const getTasks = createAsyncThunk(
   'tasks/getTasks',
   async (params: IgetTasksParams) => {
     const { userId, currentCategoryId } = params
-    if (!userId) return null
     let Data, Error
     if (currentCategoryId) {
       const { data, error } = await supabase

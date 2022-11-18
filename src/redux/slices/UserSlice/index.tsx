@@ -5,7 +5,6 @@ import { Iuser, IUserState } from './types'
 export const setUserData = createAsyncThunk(
   'user/setUserData',
   async (userId: string) => {
-    if (!userId) return null
     const { data, error } = await supabase
       .from<Iuser>('Users')
       .select()
@@ -19,8 +18,7 @@ export const setUserData = createAsyncThunk(
 export const setUserId = createAsyncThunk('user,setUserId', async () => {
   const token = JSON.parse(localStorage.getItem('supabase.auth.token') || '{}')
     ?.currentSession?.access_token
-  if (!token) return null
-  const data = (await supabase.auth.api.getUser(token)).user?.id || ''
+  const data = (await supabase.auth.api.getUser(token)).user?.id
   return data
 })
 

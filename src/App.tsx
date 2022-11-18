@@ -39,8 +39,8 @@ const AppWrapper: React.FC = () => {
     supabase.auth.onAuthStateChange(async (event, session) => {
       setEventValue(event)
       if (event !== eventValue) {
-        if (session && session.user) {
-          dispatch(setUserData(session.user?.id || ''))
+        if (session?.user) {
+          dispatch(setUserData(session.user.id))
           dispatch(setUserId())
           dispatch(getCategories(session.user.id))
           dispatch(getTasks({ userId: session.user.id, currentCategoryId }))

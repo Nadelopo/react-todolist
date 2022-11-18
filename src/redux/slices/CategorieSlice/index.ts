@@ -14,7 +14,6 @@ const searchParams = Object.fromEntries(
 export const getCategories = createAsyncThunk(
   'categories/getCategories',
   async (userId: string) => {
-    if (!userId) return null
     const { data, error } = await supabase
       .from<ICategory>('Categories')
       .select()
@@ -77,7 +76,7 @@ export const categorieSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getCategories.fulfilled, (state, action) => {
-      if (action.payload) state.categories = action.payload
+      if (action.payload?.length) state.categories = action.payload
       else {
         state.categories = []
         state.currentCategoryId = null
