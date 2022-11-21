@@ -15,7 +15,7 @@ const AppWrapper: React.FC = () => {
   )
 
   const [isMounted, setIsMounted] = useState(false)
-  const [eventValue, setEventValue] = useState('')
+  // const [eventValue, setEventValue] = useState('')
   useEffect(() => {
     if (isMounted) {
       const token = JSON.parse(
@@ -36,25 +36,28 @@ const AppWrapper: React.FC = () => {
   }, [isMounted])
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange(async (event, session) => {
-      setEventValue(event)
-      if (event !== eventValue) {
-        if (session?.user) {
-          dispatch(setUserData(session.user.id))
-          dispatch(setUserId())
-          dispatch(getCategories(session.user.id))
-          dispatch(getTasks({ userId: session.user.id, currentCategoryId }))
-          dispatch(getAllTasks(session.user.id))
-        } else {
-          dispatch(setUserData(''))
-          dispatch(getTasks({ userId: '', currentCategoryId }))
-          dispatch(getAllTasks(''))
-          dispatch(setUserId())
-          dispatch(getCategories(''))
+    if (isMounted) {
+      let eventValue = ''
+      supabase.auth.onAuthStateChange(async (event, session) => {
+        if (eventValue !== event) {
+          if (session?.user) {
+            dispatch(setUserData(session.user.id))
+            dispatch(setUserId())
+            dispatch(getCategories(session.user.id))
+            dispatch(getTasks({ userId: session.user.id, currentCategoryId }))
+            dispatch(getAllTasks(session.user.id))
+          } else {
+            dispatch(setUserData(''))
+            dispatch(getTasks({ userId: '', currentCategoryId }))
+            dispatch(getAllTasks(''))
+            dispatch(setUserId())
+            dispatch(getCategories(''))
+          }
+          eventValue = event
         }
-      }
-    })
-  }, [eventValue])
+      })
+    }
+  }, [isMounted])
 
   const theme = localStorage.getItem('theme') || 'dark'
   document.documentElement.setAttribute('data-theme', theme)

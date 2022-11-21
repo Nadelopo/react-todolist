@@ -15,8 +15,10 @@ export const Categories: React.FC = () => {
   const { userId } = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
-    dispatch(getTasks({ userId, currentCategoryId }))
-  }, [currentCategoryId])
+    if (userId) {
+      dispatch(getTasks({ userId, currentCategoryId }))
+    }
+  }, [currentCategoryId, userId])
 
   return (
     <div>
