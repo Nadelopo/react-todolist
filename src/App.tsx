@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { Navbar } from './components/Navbar'
-import { setUserData, setUserId } from './redux/slices/UserSlice'
 import { supabase } from './supabase'
-import { RootState, useAppDispatch } from './redux/store'
-import { getAllTasks, getTasks } from './redux/slices/TaskSlice'
-import { getCategories } from './redux/slices/CategorieSlice'
+import { useUserStore } from './store/user'
+import { useCategoriesStore } from './store/categories'
+import { useTaskStore } from './store/tasks'
+import { Navbar } from './components/Navbar'
 
-const AppWrapper: React.FC = () => {
-  const dispatch = useAppDispatch()
+export const AppWrapper: React.FC = () => {
+  const { setUserData, setUserId } = useUserStore((state) => ({
+    setUserData: state.setUserData,
+    setUserId: state.setUserId
+  }))
 
-  const { currentCategoryId } = useSelector(
-    (state: RootState) => state.categories
-  )
+  const { setTasks, setAllTasks } = useTaskStore((s) => ({
+    setTasks: s.setTasks,
+    setAllTasks: s.setAllTasks
+  }))
+
+  const setCategories = useCategoriesStore.getState().setCategories
 
   const [isMounted, setIsMounted] = useState(false)
-  // const [eventValue, setEventValue] = useState('')
   useEffect(() => {
     if (isMounted) {
       const token = JSON.parse(
@@ -24,12 +27,12 @@ const AppWrapper: React.FC = () => {
       if (token) {
         supabase.auth.api.getUser(token).then((User) => {
           const id = User.user?.id || ''
-          dispatch(setUserData(id))
-          dispatch(getCategories(id))
-          dispatch(getTasks({ userId: id, currentCategoryId }))
-          dispatch(getAllTasks(id))
+          setUserData(id)
+          setCategories(id)
+          setTasks(id)
+          setAllTasks()
         })
-        dispatch(setUserId())
+        setUserId()
       }
     }
     setIsMounted(true)
@@ -41,17 +44,17 @@ const AppWrapper: React.FC = () => {
       supabase.auth.onAuthStateChange(async (event, session) => {
         if (eventValue !== event) {
           if (session?.user) {
-            dispatch(setUserData(session.user.id))
-            dispatch(setUserId())
-            dispatch(getCategories(session.user.id))
-            dispatch(getTasks({ userId: session.user.id, currentCategoryId }))
-            dispatch(getAllTasks(session.user.id))
+            setUserData(session.user.id)
+            setCategories(session.user.id)
+            setTasks(session.user.id)
+            setUserId()
+            setAllTasks()
           } else {
-            dispatch(setUserData(''))
-            dispatch(getTasks({ userId: '', currentCategoryId }))
-            dispatch(getAllTasks(''))
-            dispatch(setUserId())
-            dispatch(getCategories(''))
+            setUserData('')
+            setTasks('')
+            setCategories('')
+            setUserId()
+            setAllTasks()
           }
           eventValue = event
         }
@@ -69,5 +72,3 @@ const AppWrapper: React.FC = () => {
     </div>
   )
 }
-
-export default AppWrapper

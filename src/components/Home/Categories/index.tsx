@@ -1,22 +1,26 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useUserStore } from '@/store/user'
+import { useCategoriesStore } from '@/store/categories'
+import { useTaskStore } from '@/store/tasks'
 import { routesName } from '@/index'
-import { setCurrentCategory } from '@/redux/slices/CategorieSlice'
-import { getTasks } from '@/redux/slices/TaskSlice'
-import { RootState, useAppDispatch } from '@/redux/store'
 import S from './Categories.module.sass'
 
 export const Categories: React.FC = () => {
-  const dispatch = useAppDispatch()
-  const { categories, currentCategoryId } = useSelector(
-    (state: RootState) => state.categories
-  )
-  const { userId } = useSelector((state: RootState) => state.user)
+  const userId = useUserStore((state) => state.userId)
+  const { categories, currentCategoryId } = useCategoriesStore((s) => ({
+    categories: s.categories,
+    currentCategoryId: s.currentCategoryId
+  }))
+  const setTasks = useTaskStore.getState().setTasks
+
+  const setCurrentCategory = (value: number | null) => {
+    useCategoriesStore.setState({ currentCategoryId: value })
+  }
 
   useEffect(() => {
     if (userId) {
-      dispatch(getTasks({ userId, currentCategoryId }))
+      setTasks(userId)
     }
   }, [currentCategoryId, userId])
 
@@ -28,7 +32,7 @@ export const Categories: React.FC = () => {
             <Link
               to="/"
               className={'cbtn ' + (!currentCategoryId && 'active')}
-              onClick={() => dispatch(setCurrentCategory(null))}
+              onClick={() => setCurrentCategory(null)}
             >
               все
             </Link>
@@ -40,7 +44,7 @@ export const Categories: React.FC = () => {
                 className={
                   'cbtn ' + (category.id === currentCategoryId && 'active')
                 }
-                onClick={() => dispatch(setCurrentCategory(category.id))}
+                onClick={() => setCurrentCategory(category.id)}
               >
                 {category.title}
               </Link>

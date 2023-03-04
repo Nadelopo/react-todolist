@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { routesName } from '@/index'
 import { supabase } from '@/supabase'
-import S from './Navbar.module.sass'
-import { ReactComponent as SettingSVG } from '@/assets/icons/settings.svg'
+import { routesName } from '@/index'
 import { Settings } from '../Settings'
+import { ReactComponent as SettingSVG } from '@/assets/icons/settings.svg'
+import S from './Navbar.module.sass'
 
 export const Navbar: React.FC = () => {
   const navigate = useNavigate()

@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { RootState, useAppDispatch } from '@/redux/store'
-import { useSelector } from 'react-redux'
-import {
-  deleteTask,
-  editTaskStatus,
-  getAllTasks,
-  updateTask,
-} from '@/redux/slices/TaskSlice'
+import { useTaskStore } from '@/store/tasks'
 import { Popup } from '@/components/UI/Popup'
 import S from './TaskBlock.module.sass'
 
@@ -16,14 +9,16 @@ type TcurrentTask = {
 }
 
 export const TaskBlock: React.FC = () => {
-  const dispatch = useAppDispatch()
-  const { tasks } = useSelector((state: RootState) => state.tasks)
-  const { userId } = useSelector((state: RootState) => state.user)
+  const tasks = useTaskStore((state) => state.tasks)
+  const setAllTasks = useTaskStore.getState().setAllTasks
+  const updateTask = useTaskStore.getState().updateTask
+  const deleteTask = useTaskStore.getState().deleteTask
+  const editTaskStatus = useTaskStore.getState().editTaskStatus
 
   const [isInputOpen, setIsInputOpen] = useState(false)
 
   useEffect(() => {
-    dispatch(getAllTasks(userId))
+    setAllTasks()
   }, [tasks])
 
   const [currentChangedTask, setCurrentChangedTask] = useState<TcurrentTask>({})
@@ -32,17 +27,17 @@ export const TaskBlock: React.FC = () => {
     setIsInputOpen(true)
     setCurrentChangedTask({
       id,
-      title,
+      title
     })
   }
 
   const saveChanges = async () => {
-    dispatch(updateTask(currentChangedTask))
+    updateTask(currentChangedTask)
     setIsInputOpen(false)
   }
 
   const deleteTaskProp = (id: number) => {
-    dispatch(deleteTask(id))
+    deleteTask(id)
   }
 
   return (
@@ -68,7 +63,7 @@ export const TaskBlock: React.FC = () => {
               <div className="flex items-center w-14 justify-between">
                 <div
                   className={task.status ? S.check__on : S.check__off}
-                  onClick={() => dispatch(editTaskStatus(task))}
+                  onClick={() => editTaskStatus(task)}
                 ></div>
                 <Popup
                   id={task.id}

@@ -4,7 +4,9 @@ export interface Iuser {
   created_at: Date
 }
 
-export interface IUserState {
+export interface userStore {
   user: Iuser | null
   userId: string
+  setUserId: () => Promise<void>
+  setUserData: (userId: string) => Promise<void>
 }

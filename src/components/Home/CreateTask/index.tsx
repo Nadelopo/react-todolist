@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
+import { useTaskStore } from '@/store/tasks'
+import { useUserStore } from '@/store/user'
+import { useCategoriesStore } from '@/store/categories'
 import { TaskBlock } from '../TaskBlock'
-import { RootState, useAppDispatch } from '@/redux/store'
-import { ICategory } from '@/redux/slices/CategorieSlice/types'
-import { addTask } from '@/redux/slices/TaskSlice'
+import { isOutside } from '@/utils/isOutside'
+import { ICategory } from '@/store/categories/types'
 import S from './CreateTask.module.sass'
 import { ReactComponent as TickSVG } from '@/assets/icons/tick.svg'
-import { isOutside } from '@/utils/isOutside'
 
 interface IcurrentCategory {
   id?: number
@@ -15,34 +15,28 @@ interface IcurrentCategory {
 }
 
 export const CreateTask: React.FC = () => {
-  const dispatch = useAppDispatch()
   const [newTask, setNewTask] = useState('')
   const [open, setOpen] = useState(false)
   const [activeSelect, setActiveSelect] = useState(false)
   const [formWarning, setFormWarning] = useState(false)
   const [currentCategory, setCurrentCategory] = useState<IcurrentCategory>({})
-  const { categories } = useSelector((state: RootState) => state.categories)
   const selectRef = useRef(null)
+
+  const categories = useCategoriesStore((state) => state.categories)
+  const addTask = useTaskStore.getState().addTask
+  const userId = useUserStore((state) => state.userId)
 
   const clickOnCategory = (category: ICategory) => {
     setCurrentCategory({ id: category.id, title: category.title })
     setActiveSelect(false)
   }
 
-  const { userId } = useSelector((state: RootState) => state.user)
-
   const createTask = () => {
     if (!currentCategory.id || !newTask) {
       setFormWarning(true)
       Swal.fire('Заполните поля', '', 'warning')
     } else if (currentCategory.id !== null) {
-      dispatch(
-        addTask({
-          title: newTask,
-          categoryId: currentCategory.id,
-          userId,
-        })
-      )
+      addTask(newTask, currentCategory.id, userId)
       setNewTask('')
     }
   }

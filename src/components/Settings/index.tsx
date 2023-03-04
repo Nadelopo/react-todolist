@@ -3,11 +3,11 @@ import React, {
   SetStateAction,
   useEffect,
   useRef,
-  useState,
+  useState
 } from 'react'
-import S from './Settings.module.sass'
-import { ReactComponent as CloseSVG } from '@/assets/icons/close.svg'
 import { Accordion } from '../UI/Accordion'
+import { ReactComponent as CloseSVG } from '@/assets/icons/close.svg'
+import S from './Settings.module.sass'
 
 interface Isettings {
   setOpenSettings: Dispatch<SetStateAction<boolean>>
@@ -28,7 +28,7 @@ export const Settings: React.FC<Isettings> = ({ setOpenSettings }) => {
     { title: 'светлая', func: () => setTheme('light') },
     { title: 'бирюзовый', func: () => setTheme('turquoise') },
     { title: 'фиолетовый', func: () => setTheme('purple') },
-    { title: 'ораньжевый', func: () => setTheme('orange') },
+    { title: 'ораньжевый', func: () => setTheme('orange') }
   ]
   return (
     <div className={S.root}>

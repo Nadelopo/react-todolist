@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Provider } from 'react-redux'
 import {
   BrowserRouter as Router,
   useNavigate,
-  useRoutes,
+  useRoutes
 } from 'react-router-dom'
-import AppWrapper from './App'
-import { store } from './redux/store'
+import { AppWrapper } from './App'
 import Auth from '@/pages/Auth'
 import { Home } from './pages/Home'
 import { Profile } from './pages/Profile'
@@ -15,7 +13,7 @@ import { supabase } from './supabase'
 export const routesName = {
   Auth: '/auth',
   Home: '/',
-  Profile: '/profile',
+  Profile: '/profile'
 }
 const locate = window.location.pathname
 const App = () => {
@@ -39,19 +37,17 @@ const App = () => {
   return useRoutes([
     { path: routesName.Auth, element: <Auth /> },
     { path: routesName.Home, element: <Home /> },
-    { path: routesName.Profile, element: <Profile /> },
+    { path: routesName.Profile, element: <Profile /> }
   ])
 }
 
 export const Index = () => {
   return (
     <Router>
-      <Provider store={store}>
-        <AppWrapper />
-        <div className="container">
-          <App />
-        </div>
-      </Provider>
+      <AppWrapper />
+      <div className="container">
+        <App />
+      </div>
     </Router>
   )
 }

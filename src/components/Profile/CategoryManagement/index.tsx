@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
-import { RootState, useAppDispatch } from '@/redux/store'
-import {
-  createCategory,
-  deleteCategory,
-  updateCategory,
-} from '@/redux/slices/CategorieSlice'
+import { useUserStore } from '@/store/user'
+import { useCategoriesStore } from '@/store/categories'
 import { Popup } from '@/components/UI/Popup'
 import S from './CategoryManagement.module.sass'
 
 export const CategoryManagement: React.FC = () => {
-  const dispatch = useAppDispatch()
-  const { categories } = useSelector((state: RootState) => state.categories)
-  const { userId } = useSelector((state: RootState) => state.user)
+  const { categories, deleteCategory, updateCategory, createCategory } =
+    useCategoriesStore((s) => ({
+      categories: s.categories,
+      deleteCategory: s.deleteCategory,
+      updateCategory: s.updateCategory,
+      createCategory: s.createCategory
+    }))
+  const userId = useUserStore((state) => state.userId)
 
   const [changeStateCategory, setChangeStateCategory] = useState(false)
   const [openInput, setOpenInput] = useState(false)
@@ -41,15 +41,15 @@ export const CategoryManagement: React.FC = () => {
   }
 
   const deleteCategoryProps = (id: number) => {
-    dispatch(deleteCategory(id))
+    deleteCategory(id)
   }
 
   const save = async () => {
     if (newCategory || changeCategory) {
       if (changeStateCategory) {
-        dispatch(updateCategory({ title: changeCategory, currentCategoryId }))
+        updateCategory(changeCategory, currentCategoryId)
       } else if (openInput) {
-        dispatch(createCategory({ title: newCategory, userId }))
+        createCategory(newCategory, userId)
       }
       cancel()
     } else {
