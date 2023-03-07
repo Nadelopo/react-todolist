@@ -1,4 +1,4 @@
-export interface Itask {
+export interface Task {
   id: number
   created_at: Date
   title: string
@@ -7,18 +7,18 @@ export interface Itask {
   userId: string
 }
 
-export interface IcurrentTask {
+export interface CurrentTask {
   id?: number
   title?: string
 }
 
-export interface taskStore {
-  tasks: Itask[]
-  allTasks: Itask[]
+export interface TaskStore {
+  tasks: Task[]
+  allTasks: Task[]
   setAllTasks: () => Promise<void>
   setTasks: (userId: string) => Promise<void>
   addTask: (title: string, categoryId: number, userId: string) => Promise<void>
-  updateTask: (task: IcurrentTask) => Promise<void>
-  editTaskStatus: (task: Itask) => Promise<void>
+  updateTask: (task: CurrentTask) => Promise<void>
+  editTaskStatus: (task: Task) => Promise<void>
   deleteTask: (id: number) => Promise<void>
 }

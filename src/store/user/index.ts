@@ -1,9 +1,9 @@
 import create from 'zustand'
 import { supabase } from '@/supabase'
 import { getOneById } from '@/utils/queries'
-import { Iuser, userStore } from './types'
+import { User, UserStore } from './types'
 
-export const useUserStore = create<userStore>((set) => ({
+export const useUserStore = create<UserStore>((set) => ({
   user: null,
   userId: '',
   setUserId: async () => {
@@ -16,7 +16,7 @@ export const useUserStore = create<userStore>((set) => ({
     }
   },
   setUserData: async (userId: string) => {
-    const data = await getOneById<Iuser>('Users', userId)
+    const data = await getOneById<User>('Users', userId)
     set({ user: data })
   }
 }))

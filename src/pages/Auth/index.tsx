@@ -3,23 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { supabase } from '@/supabase'
 import { routesName } from '@/index'
+import type { User } from '@/store/user/types'
+import type { Category } from '@/store/categories/types'
 import S from './Auth.module.sass'
-
-interface Iuser {
-  id: string
-  email: string
-  created_at: Date
-}
-
-interface ICategory {
-  id: number
-  created_at: Date
-  title: string
-  userId: string
-}
+import { createOne } from '@/utils/queries'
+import { useCategoriesStore } from '@/store/categories'
 
 const Auth: React.FC = () => {
   const navigate = useNavigate()
+  const setCategories = useCategoriesStore.getState().setCategories
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -28,7 +20,7 @@ const Auth: React.FC = () => {
   const signUp = async () => {
     const { user, error } = await supabase.auth.signUp({
       email,
-      password,
+      password
     })
     if (error) {
       console.log(error)
@@ -43,24 +35,25 @@ const Auth: React.FC = () => {
       Swal.fire(message, '', 'error')
     }
     if (user) {
-      const { error: insertUser } = await supabase
-        .from<Iuser>('Users')
-        .insert([{ id: user.id, email: email }])
-        .single()
-      const { error: insertCategory } = await supabase
-        .from<ICategory>('Categories')
-        .insert({ title: 'ежедневные', userId: user.id })
-
-      if (insertUser) console.log(insertUser)
-      if (insertCategory) console.log(insertCategory)
-      navigate(routesName.Home)
+      const data = await createOne<User>('Users', {
+        id: user.id,
+        email: user.email
+      })
+      if (data) {
+        await createOne<Category>('Categories', {
+          title: 'ежедневные',
+          userId: user.id
+        })
+        await setCategories(user.id)
+        navigate(routesName.Home)
+      }
     }
   }
 
   const signIn = async () => {
     const { error } = await supabase.auth.signIn({
       email,
-      password,
+      password
     })
     if (error) {
       console.log(error)

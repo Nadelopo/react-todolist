@@ -1,5 +1,5 @@
-import { useTaskStore } from '@/store/tasks'
 import React, { useMemo } from 'react'
+import { useTaskStore } from '@/store/tasks'
 import S from './OverviewsTasks.module.sass'
 
 export const OverviewsTasks: React.FC = () => {

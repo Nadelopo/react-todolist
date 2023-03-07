@@ -2,11 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useTaskStore } from '@/store/tasks'
 import { Popup } from '@/components/UI/Popup'
 import S from './TaskBlock.module.sass'
-
-type TcurrentTask = {
-  id?: number
-  title?: string
-}
+import type { CurrentTask } from '@/store/tasks/types'
 
 export const TaskBlock: React.FC = () => {
   const tasks = useTaskStore((state) => state.tasks)
@@ -21,7 +17,7 @@ export const TaskBlock: React.FC = () => {
     setAllTasks()
   }, [tasks])
 
-  const [currentChangedTask, setCurrentChangedTask] = useState<TcurrentTask>({})
+  const [currentChangedTask, setCurrentChangedTask] = useState<CurrentTask>({})
 
   const changeTask = (id: number, title: string) => {
     setIsInputOpen(true)

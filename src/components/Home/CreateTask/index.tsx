@@ -5,11 +5,11 @@ import { useUserStore } from '@/store/user'
 import { useCategoriesStore } from '@/store/categories'
 import { TaskBlock } from '../TaskBlock'
 import { isOutside } from '@/utils/isOutside'
-import { ICategory } from '@/store/categories/types'
+import { Category } from '@/store/categories/types'
 import S from './CreateTask.module.sass'
 import { ReactComponent as TickSVG } from '@/assets/icons/tick.svg'
 
-interface IcurrentCategory {
+interface CurrentCategory {
   id?: number
   title?: string
 }
@@ -19,14 +19,14 @@ export const CreateTask: React.FC = () => {
   const [open, setOpen] = useState(false)
   const [activeSelect, setActiveSelect] = useState(false)
   const [formWarning, setFormWarning] = useState(false)
-  const [currentCategory, setCurrentCategory] = useState<IcurrentCategory>({})
+  const [currentCategory, setCurrentCategory] = useState<CurrentCategory>({})
   const selectRef = useRef(null)
 
   const categories = useCategoriesStore((state) => state.categories)
   const addTask = useTaskStore.getState().addTask
   const userId = useUserStore((state) => state.userId)
 
-  const clickOnCategory = (category: ICategory) => {
+  const clickOnCategory = (category: Category) => {
     setCurrentCategory({ id: category.id, title: category.title })
     setActiveSelect(false)
   }

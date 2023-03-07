@@ -1,9 +1,9 @@
 import { supabase } from '@/supabase'
 
-type Itables = 'Categories' | 'Tasks' | 'Users'
+type Tables = 'Categories' | 'Tasks' | 'Users'
 
 export const getAllByColumns = async <T>(
-  table: Itables,
+  table: Tables,
   eq: { column: keyof T; value: T[keyof T] | null }[],
   order?: keyof T
 ) => {
@@ -22,7 +22,7 @@ export const getAllByColumns = async <T>(
   return data
 }
 
-export const getOneById = async <T>(table: Itables, id: T[keyof T]) => {
+export const getOneById = async <T>(table: Tables, id: T[keyof T]) => {
   const { data, error } = await supabase
     .from<T>(table)
     .select()
@@ -32,10 +32,7 @@ export const getOneById = async <T>(table: Itables, id: T[keyof T]) => {
   return data
 }
 
-export const createOne = async <T>(
-  table: Itables,
-  insertValues: Partial<T>
-) => {
+export const createOne = async <T>(table: Tables, insertValues: Partial<T>) => {
   const { data, error } = await supabase
     .from<T>(table)
     .insert(insertValues)
@@ -45,7 +42,7 @@ export const createOne = async <T>(
 }
 
 export const updateOne = async <T>(
-  table: Itables,
+  table: Tables,
   updateValue: Partial<T>,
   id: T[keyof T]
 ) => {
@@ -58,7 +55,7 @@ export const updateOne = async <T>(
   return data
 }
 
-export const deleteOne = async <T>(table: Itables, id: T[keyof T]) => {
+export const deleteOne = async <T>(table: Tables, id: T[keyof T]) => {
   const { data, error } = await supabase
     .from<T>(table)
     .delete()
